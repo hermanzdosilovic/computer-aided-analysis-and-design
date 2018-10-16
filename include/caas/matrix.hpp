@@ -3,10 +3,15 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <fstream>
+#include <istream>
 #include <iterator>
 #include <memory>
-#include <utility>
+#include <ostream>
 #include <random>
+#include <sstream>
+#include <string_view>
+#include <utility>
 
 #define N0OP ( ( void ) 0 )
 
@@ -55,6 +60,15 @@ public:
         data_{ std::move( matrix.data_ ) }
     { TRACE
         matrix.rows_ = matrix.cols_ = matrix.size_ = 0;
+    }
+
+    Matrix( std::string_view const & filePath )
+    { TRACE
+        std::ifstream file{ filePath.data(), std::ios_base::in };
+        Matrix tmp;
+        file >> tmp;
+        file.close();
+        *this = std::move( tmp );
     }
 
     ~Matrix() { TRACE }
@@ -120,10 +134,20 @@ public:
         return true;
     }
 
+    bool compare( Matrix const & other, double const precision = 1e-15 ) noexcept
+    {
+        if ( rows_ != other.rows_ || cols_ != other.cols_ ) { return false; }
+        for ( std::size_t i{ 0 }; i < size_; ++i )
+        {
+            if ( std::abs( data_[ i ] - other.data_[ i ] ) > precision ) { return false; }
+        }
+        return true;
+    }
+
     inline bool operator!=( Matrix const & other ) noexcept { TRACE return !( *this == other ); }
 
     inline Matrix & operator*=( Matrix const & other )
-    {
+    { TRACE
         assert( cols_ == other.rows_ );
         Matrix result{ rows_, other.cols_ };
         for ( std::size_t i{ 0 }; i < result.rows_; ++i )
@@ -143,7 +167,7 @@ public:
     }
 
     inline Matrix operator*( Matrix const & other ) const
-    {
+    { TRACE
         assert( cols_ == other.rows_ );
         Matrix copy{ *this };
         copy *= other;
@@ -278,6 +302,36 @@ public:
         return stream;
     }
 
+    friend inline std::istream & operator>>( std::istream & stream, caas::Matrix & matrix )
+    { TRACE
+        std::size_t rows{ 0 };
+        std::vector< value_type > values;
+        for ( std::string line; std::getline( stream, line ); )
+        {
+            std::istringstream stringStream( line );
+            bool picked_first{ false };
+            for ( value_type tmp; stringStream >> tmp; )
+            {
+                if ( !picked_first )
+                {
+                    picked_first = true;
+                    ++rows;
+                }
+                values.push_back( tmp );
+            }
+        }
+
+        assert( std::size( values ) % rows == 0 );
+
+        matrix = Matrix{ rows, std::size( values ) / rows };
+        for ( std::size_t i{ 0 }; i < std::size( values ); ++i )
+        {
+            matrix.data_[ i ] = values[ i ];
+        }
+
+        return stream;
+    }
+
     inline Matrix transpose() const
     { TRACE
         Matrix copy{ this->cols_, this->rows_ };
@@ -291,8 +345,11 @@ public:
         return copy;
     }
 
-    inline double * begin() noexcept { TRACE return data_.get();         }
-    inline double * end()   noexcept { TRACE return data_.get() + size_; }
+    inline double * const begin() noexcept { TRACE return data_.get();         }
+    inline double * const end()   noexcept { TRACE return data_.get() + size_; }
+
+    inline double const * const begin() const noexcept { TRACE return data_.get();         }
+    inline double const * const end()   const noexcept { TRACE return data_.get() + size_; }
 
     inline Matrix & setRandom()
     { TRACE
@@ -330,9 +387,9 @@ public:
     inline Matrix & fill( value_type const constant ) noexcept { TRACE return setConstant( constant ); }
 
 private:
-    std::size_t rows_;
-    std::size_t cols_;
-    std::size_t size_;
+    std::size_t rows_{};
+    std::size_t cols_{};
+    std::size_t size_{};
     std::unique_ptr< value_type[] > data_;
 };
 
