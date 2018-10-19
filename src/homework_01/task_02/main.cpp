@@ -13,8 +13,8 @@ int main()
     std::cout << "p2:\n" << p2 << "\nlu2:\n" << lu2 << '\n';
 
     caas::Matrix b{ "test_data/hw01/vector1_t02.txt" };
-    auto x = caas::linear::solve( a, b );
-    std::cout << x << '\n';
+    caas::linear::solve( a, b );
+    std::cout << b << '\n';
 
     return 0;
 }
