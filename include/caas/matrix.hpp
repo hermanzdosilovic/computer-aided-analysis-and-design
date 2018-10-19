@@ -13,27 +13,6 @@
 #include <string_view>
 #include <utility>
 
-#define N0OP ( ( void ) 0 )
-
-#if !defined( NTRACE ) || !defined( NDEBUG )
-#include <cstdio>
-#define DETAILS std::printf( "[%s %s] %s:%d %s", __DATE__, __TIME__, __FILE__, __LINE__, __PRETTY_FUNCTION__ );
-#else
-#define DETAILS NOOP;
-#endif
-
-#ifndef NTRACE
-#define TRACE DETAILS std::printf( "\n" );
-#else
-#define TRACE N0OP;
-#endif
-
-#ifndef NDEBUG
-#define LOG_INFO( fmt, ... ) DETAILS std::printf( ": " fmt "\n", ##__VA_ARGS__ )
-#else
-#define LOG_INFO( fmt, ... ) NO0P
-#endif
-
 namespace caas
 {
 class Matrix
@@ -41,15 +20,15 @@ class Matrix
 public:
     using value_type = double;
 
-    Matrix() { TRACE }
+    Matrix() = default;
 
     Matrix( std::size_t const rows, std::size_t const cols ) : rows_{ rows }, cols_{ cols }, size_{ rows_ * cols_ }
-    { TRACE
+    {
         data_ = std::make_unique< value_type[] >( size_ );
     }
 
     Matrix( Matrix const & matrix ) : Matrix( matrix.rows_, matrix.cols_ )
-    { TRACE
+    {
         std::copy( matrix.data_.get(), matrix.data_.get() + size_, data_.get() );
     }
 
@@ -58,12 +37,12 @@ public:
         cols_{ matrix.cols_ },
         size_{ matrix.size_ },
         data_{ std::move( matrix.data_ ) }
-    { TRACE
+    {
         matrix.rows_ = matrix.cols_ = matrix.size_ = 0;
     }
 
     Matrix( std::string_view const & filePath )
-    { TRACE
+    {
         std::ifstream file{ filePath.data(), std::ios_base::in };
         Matrix tmp;
         file >> tmp;
@@ -71,52 +50,52 @@ public:
         *this = std::move( tmp );
     }
 
-    ~Matrix() { TRACE }
+    ~Matrix() = default;
 
-    static inline Matrix Identity( std::size_t const rows, std::size_t const cols )
-    { TRACE
+    static Matrix Identity( std::size_t const rows, std::size_t const cols )
+    {
         Matrix matrix{ rows, cols };
         matrix.setIdentity();
         return matrix;
     }
 
-    static inline Matrix Identity( std::size_t const size )
-    { TRACE
+    static Matrix Identity( std::size_t const size )
+    {
         return Identity( size, size );
     }
 
     static Matrix Random( std::size_t const rows, std::size_t const cols )
-    { TRACE
+    {
         Matrix matrix{ rows, cols };
         matrix.setRandom();
         return matrix;
     }
 
-    static inline Matrix Random( std::size_t const size )
-    { TRACE
+    static Matrix Random( std::size_t const size )
+    {
         return Random( size, size );
     }
 
-    inline std::size_t rows() const { TRACE return rows_; }
-    inline std::size_t cols() const { TRACE return cols_; }
-    inline std::size_t size() const { TRACE return size_; }
+    std::size_t rows() const { return rows_; }
+    std::size_t cols() const { return cols_; }
+    std::size_t size() const { return size_; }
 
-    inline value_type operator()( std::size_t const row, std::size_t const col ) const
-    { TRACE
+    value_type operator()( std::size_t const row, std::size_t const col ) const
+    {
         assert( row < rows_ );
         assert( col < cols_ );
         return data_[ cols_ * row + col ];
     }
 
-    inline value_type & operator()( std::size_t const row, std::size_t const col )
-    { TRACE
+    value_type & operator()( std::size_t const row, std::size_t const col )
+    {
         assert( row < rows_ );
         assert( col < cols_ );
         return data_[ cols_ * row + col ];
     }
 
-    inline Matrix & operator=( Matrix other )
-    { TRACE
+    Matrix & operator=( Matrix other )
+    {
         std::swap( this->rows_, other.rows_ );
         std::swap( this->cols_, other.cols_ );
         std::swap( this->size_, other.size_ );
@@ -124,8 +103,8 @@ public:
         return *this;
     }
 
-    inline bool operator==( Matrix const & other ) noexcept
-    { TRACE
+    bool operator==( Matrix const & other ) noexcept
+    {
         if ( rows_ != other.rows_ || cols_ != other.cols_ ) { return false; }
         for ( std::size_t i{ 0 }; i < size_; ++i )
         {
@@ -144,10 +123,30 @@ public:
         return true;
     }
 
-    inline bool operator!=( Matrix const & other ) noexcept { TRACE return !( *this == other ); }
+    void swapRows( std::size_t const i, std::size_t const j ) noexcept
+    {
+        assert( i < rows_ );
+        assert( j < rows_ );
+        for ( std::size_t k{ 0 }; k < cols_; ++k )
+        {
+            std::swap( ( *this )( i, k ), ( *this )( j, k ) );
+        }
+    }
 
-    inline Matrix & operator*=( Matrix const & other )
-    { TRACE
+    void swapCols( std::size_t const i, std::size_t const j ) noexcept
+    {
+        assert( i < cols_ );
+        assert( j < cols_ );
+        for ( std::size_t k{ 0 }; k < rows_; ++k )
+        {
+            std::swap( ( *this )( k, i ), ( *this )( k, j ) );
+        }
+    }
+
+    bool operator!=( Matrix const & other ) noexcept { return !( *this == other ); }
+
+    Matrix & operator*=( Matrix const & other )
+    {
         assert( cols_ == other.rows_ );
         Matrix result{ rows_, other.cols_ };
         for ( std::size_t i{ 0 }; i < result.rows_; ++i )
@@ -166,8 +165,8 @@ public:
         return *this;
     }
 
-    inline Matrix operator*( Matrix const & other ) const
-    { TRACE
+    Matrix operator*( Matrix const & other ) const
+    {
         assert( cols_ == other.rows_ );
         Matrix copy{ *this };
         copy *= other;
@@ -175,38 +174,38 @@ public:
     }
 
     template< typename T >
-    inline Matrix & operator*=( T const constant )
-    { TRACE
+    Matrix & operator*=( T const constant )
+    {
         for ( auto & value : *this ) { value *= constant; }
         return *this;
     }
 
     template< typename T >
-    inline Matrix operator*( T const constant ) const
-    { TRACE
+    Matrix operator*( T const constant ) const
+    {
         Matrix copy{ *this };
         copy *= constant;
         return copy;
     }
 
     template< typename T >
-    inline Matrix & operator/=( T const constant )
-    { TRACE
+    Matrix & operator/=( T const constant )
+    {
         assert( constant != static_cast< T >( 0 ) );
         for ( auto & value : *this ) { value /= constant; }
         return *this;
     }
 
     template< typename T >
-    inline Matrix operator/( T const constant ) const
-    { TRACE
+    Matrix operator/( T const constant ) const
+    {
         Matrix copy{ *this };
         copy /= constant;
         return copy;
     }
 
-    inline Matrix & operator+=( Matrix const & other )
-    { TRACE
+    Matrix & operator+=( Matrix const & other )
+    {
         assert( rows_ == other.rows_ );
         assert( cols_ == other.cols_ );
         for ( std::size_t i{ 0 }; i < size_; ++i )
@@ -216,8 +215,8 @@ public:
         return *this;
     }
 
-    inline Matrix operator+( Matrix const & other ) const
-    { TRACE
+    Matrix operator+( Matrix const & other ) const
+    {
         assert( rows_ == other.rows_ );
         assert( cols_ == other.cols_ );
         Matrix copy{ other };
@@ -226,22 +225,22 @@ public:
     }
 
     template< typename T >
-    inline Matrix & operator+=( T const constant )
-    { TRACE
+    Matrix & operator+=( T const constant )
+    {
         for ( auto & value : *this ) { value += constant; }
         return *this;
     }
 
     template< typename T >
-    inline Matrix operator+( T const constant ) const
-    { TRACE
+    Matrix operator+( T const constant ) const
+    {
         Matrix copy{ *this };
         copy += constant;
         return copy;
     }
 
-    inline Matrix & operator-=( Matrix const & other )
-    { TRACE
+    Matrix & operator-=( Matrix const & other )
+    {
         assert( rows_ == other.rows_ );
         assert( cols_ == other.cols_ );
         for ( std::size_t i{ 0 }; i < size_; ++i )
@@ -251,8 +250,8 @@ public:
         return *this;
     }
 
-    inline Matrix operator-( Matrix const & other ) const
-    { TRACE
+    Matrix operator-( Matrix const & other ) const
+    {
         assert( rows_ == other.rows_ );
         assert( cols_ == other.cols_ );
         Matrix copy{ other };
@@ -261,34 +260,34 @@ public:
     }
 
     template< typename T >
-    inline Matrix & operator-=( T const constant )
-    { TRACE
+    Matrix & operator-=( T const constant )
+    {
         for ( auto & value : *this ) { value -= constant; };
         return *this;
     }
 
     template< typename T >
-    inline Matrix operator-( T const constant ) const
-    { TRACE
+    Matrix operator-( T const constant ) const
+    {
         Matrix copy{ *this };
         copy -= constant;
         return copy;
     }
 
-    inline Matrix operator-() const
-    { TRACE
+    Matrix operator-() const
+    {
         Matrix copy{ *this };
         for ( auto & value : copy ) { value = -value; }
         return copy;
     }
 
-    inline Matrix operator~() const
-    { TRACE
+    Matrix operator~() const
+    {
         return this->transpose();
     }
 
-    friend inline std::ostream & operator<<( std::ostream & stream, Matrix const & matrix )
-    { TRACE
+    friend std::ostream & operator<<( std::ostream & stream, Matrix const & matrix )
+    {
         for ( std::size_t i{ 0 }; i < matrix.rows_; ++i )
         {
             for ( std::size_t j{ 0 }; j < matrix.cols_; ++j )
@@ -302,8 +301,8 @@ public:
         return stream;
     }
 
-    friend inline std::istream & operator>>( std::istream & stream, caas::Matrix & matrix )
-    { TRACE
+    friend std::istream & operator>>( std::istream & stream, caas::Matrix & matrix )
+    {
         std::size_t rows{ 0 };
         std::vector< value_type > values;
         for ( std::string line; std::getline( stream, line ); )
@@ -332,8 +331,8 @@ public:
         return stream;
     }
 
-    inline Matrix transpose() const
-    { TRACE
+    Matrix transpose() const
+    {
         Matrix copy{ this->cols_, this->rows_ };
         for ( std::size_t i{ 0 }; i < rows_; ++i )
         {
@@ -345,14 +344,14 @@ public:
         return copy;
     }
 
-    inline double * const begin() noexcept { TRACE return data_.get();         }
-    inline double * const end()   noexcept { TRACE return data_.get() + size_; }
+    double * const begin() noexcept { return data_.get();         }
+    double * const end()   noexcept { return data_.get() + size_; }
 
-    inline double const * const begin() const noexcept { TRACE return data_.get();         }
-    inline double const * const end()   const noexcept { TRACE return data_.get() + size_; }
+    double const * const begin() const noexcept { return data_.get();         }
+    double const * const end()   const noexcept { return data_.get() + size_; }
 
-    inline Matrix & setRandom()
-    { TRACE
+    Matrix & setRandom()
+    {
         static std::random_device               randomDevice;
         static std::mt19937                     twisterEngine{ randomDevice() };
         static std::uniform_real_distribution<> distribution{ -1, 1 };
@@ -362,8 +361,8 @@ public:
         return *this;
     }
 
-    inline Matrix & setIdentity()
-    { TRACE
+    Matrix & setIdentity()
+    {
         for ( std::size_t i{ 0 }; i < rows_; ++i )
         {
             for ( std::size_t j{ 0 }; j < cols_; ++j )
@@ -374,17 +373,17 @@ public:
         return *this;
     }
 
-    inline Matrix & setZero() noexcept { TRACE return setConstant( 0 ); }
+    Matrix & setZero() noexcept { return setConstant( 0 ); }
 
-    inline Matrix & setOnes() noexcept { TRACE return setConstant( 1 ); }
+    Matrix & setOnes() noexcept { return setConstant( 1 ); }
 
-    inline Matrix & setConstant( value_type const constant ) noexcept
-    { TRACE
+    Matrix & setConstant( value_type const constant ) noexcept
+    {
         for ( auto & value : *this ) { value = constant; }
         return *this;
     }
 
-    inline Matrix & fill( value_type const constant ) noexcept { TRACE return setConstant( constant ); }
+    Matrix & fill( value_type const constant ) noexcept { return setConstant( constant ); }
 
 private:
     std::size_t rows_{};
@@ -395,19 +394,19 @@ private:
 
 template< typename T >
 Matrix operator*( T const constant, Matrix const & matrix )
-{ TRACE
+{
     return matrix * constant;
 }
 
 template< typename T >
 Matrix operator/( T const constant, Matrix const & matrix )
-{ TRACE
+{
     return matrix / constant;
 }
 
 template< typename T >
 Matrix operator+( T const constant, Matrix const & matrix )
-{ TRACE
+{
     return matrix + constant;
 }
 

@@ -2,16 +2,15 @@
 
 #include "matrix.hpp"
 
-#include <cassert>
-
-namespace caas
+namespace caas::supstitution
 {
 
-Matrix forwardSupstitution( Matrix const & matrix, Matrix const & vector )
+Matrix forward( Matrix const & matrix, Matrix const & vector )
 {
     assert( matrix.rows() == matrix.cols() );
     assert( vector.rows() == matrix.rows() && vector.cols() == 1 );
 
+#ifndef NDEBUG
     for ( std::size_t i{ 0 }; i < matrix.rows(); ++i )
     {
         for ( std::size_t j{ 0 }; j < matrix.cols(); ++j )
@@ -26,6 +25,7 @@ Matrix forwardSupstitution( Matrix const & matrix, Matrix const & vector )
             }
         }
     }
+#endif
 
     Matrix result{ matrix.rows(), 1 };
     for ( std::size_t i{ 0 }; i < result.rows(); ++i )
@@ -40,11 +40,12 @@ Matrix forwardSupstitution( Matrix const & matrix, Matrix const & vector )
     return result;
 }
 
-Matrix backwardSupstitution( Matrix const & matrix, Matrix const & vector )
+Matrix backward( Matrix const & matrix, Matrix const & vector )
 {
     assert( matrix.rows() == matrix.cols() );
     assert( vector.rows() == matrix.rows() && vector.cols() == 1 );
 
+#ifndef NDEBUG
     for ( std::size_t i{ 0 }; i < matrix.rows(); ++i )
     {
         for ( std::size_t j{ 0 }; j < matrix.cols(); ++j )
@@ -55,6 +56,7 @@ Matrix backwardSupstitution( Matrix const & matrix, Matrix const & vector )
             }
         }
     }
+#endif
 
     Matrix result{ matrix.rows(), 1 };
     for ( std::size_t i{ result.rows() - 1 }; i >= 0; --i )
@@ -65,26 +67,6 @@ Matrix backwardSupstitution( Matrix const & matrix, Matrix const & vector )
             result( i, 1 ) -= matrix( i, j ) * result( j, 1 );
         }
         result( i, 1 ) /= matrix( i, i );
-    }
-
-    return result;
-}
-
-Matrix decompose( Matrix const & matrix )
-{
-    assert( matrix.rows() == matrix.cols() );
-
-    Matrix result{ matrix };
-    for ( std::size_t i{ 0 }; i < result.rows() - 1; ++i )
-    {
-        for ( std::size_t j{ i + 1 }; j < result.cols(); ++j )
-        {
-            result( j, i ) /= result( i, i );
-            for ( std::size_t k{ i + 1 }; k < result.cols(); ++k )
-            {
-                result( j, k ) -= result( j, i ) * result( i, k );
-            }
-        }
     }
 
     return result;
