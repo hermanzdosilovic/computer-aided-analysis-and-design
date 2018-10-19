@@ -11,5 +11,6 @@ int main()
     auto [ p2, lu2 ] = caas::decompose( a );
     std::cout << "p2:\n" << p2 << "\nlu2:\n" << lu2 << '\n';
 
+    caas::Matrix b{ "test_data/hw01/vector1_t02.txt" };
     return 0;
 }

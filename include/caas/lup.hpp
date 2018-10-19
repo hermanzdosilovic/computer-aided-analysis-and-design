@@ -8,6 +8,10 @@
 #include <cstdlib>
 #include <utility>
 
+#ifndef NDEBUG
+#include <iostream>
+#endif
+
 namespace caas
 {
 
@@ -67,6 +71,11 @@ std::pair< Matrix, Matrix > decompose( Matrix const & matrix, Strategy const str
                 result( j, k ) -= result( j, i ) * result( i, k );
             }
         }
+
+    #ifndef NDEBUG
+        std::cout << result << '\n';
+    #endif
+
     }
 
     if ( decomposeError )

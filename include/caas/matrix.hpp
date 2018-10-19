@@ -123,26 +123,6 @@ public:
         return true;
     }
 
-    void swapRows( std::size_t const i, std::size_t const j ) noexcept
-    {
-        assert( i < rows_ );
-        assert( j < rows_ );
-        for ( std::size_t k{ 0 }; k < cols_; ++k )
-        {
-            std::swap( ( *this )( i, k ), ( *this )( j, k ) );
-        }
-    }
-
-    void swapCols( std::size_t const i, std::size_t const j ) noexcept
-    {
-        assert( i < cols_ );
-        assert( j < cols_ );
-        for ( std::size_t k{ 0 }; k < rows_; ++k )
-        {
-            std::swap( ( *this )( k, i ), ( *this )( k, j ) );
-        }
-    }
-
     bool operator!=( Matrix const & other ) noexcept { return !( *this == other ); }
 
     Matrix & operator*=( Matrix const & other )
@@ -342,6 +322,26 @@ public:
             }
         }
         return copy;
+    }
+
+    void swapRows( std::size_t const i, std::size_t const j ) noexcept
+    {
+        assert( i < rows_ );
+        assert( j < rows_ );
+        for ( std::size_t k{ 0 }; k < cols_; ++k )
+        {
+            std::swap( ( *this )( i, k ), ( *this )( j, k ) );
+        }
+    }
+
+    void swapCols( std::size_t const i, std::size_t const j ) noexcept
+    {
+        assert( i < cols_ );
+        assert( j < cols_ );
+        for ( std::size_t k{ 0 }; k < rows_; ++k )
+        {
+            std::swap( ( *this )( k, i ), ( *this )( k, j ) );
+        }
     }
 
     double * const begin() noexcept { return data_.get();         }
