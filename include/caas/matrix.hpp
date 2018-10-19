@@ -27,6 +27,8 @@ public:
         data_ = std::make_unique< value_type[] >( size_ );
     }
 
+    Matrix ( std::size_t const size ) : Matrix( size, size ) {}
+
     Matrix( Matrix const & matrix ) : Matrix( matrix.rows_, matrix.cols_ )
     {
         std::copy( matrix.data_.get(), matrix.data_.get() + size_, data_.get() );

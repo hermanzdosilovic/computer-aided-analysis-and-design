@@ -30,10 +30,10 @@ Matrix forward( Matrix const & matrix, Matrix const & vector )
     Matrix result{ matrix.rows(), 1 };
     for ( std::size_t i{ 0 }; i < result.rows(); ++i )
     {
-        result( i, 1 ) = vector( i, 1 );
+        result( i, 0 ) = vector( i, 0 );
         for ( std::size_t j{ 0 }; j < i; ++j )
         {
-            result( i, 1 ) -= matrix( i, j ) * result( j, 1 );
+            result( i, 0 ) -= matrix( i, j ) * result( j, 0 );
         }
     }
 
@@ -61,12 +61,17 @@ Matrix backward( Matrix const & matrix, Matrix const & vector )
     Matrix result{ matrix.rows(), 1 };
     for ( std::size_t i{ result.rows() - 1 }; i >= 0; --i )
     {
-        result( i, 1 ) = vector( i, 1 );
-        for ( std::size_t j{ i + 1 }; j < result.rows(); j++ )
+        result( i, 0 ) = vector( i, 0 );
+        for ( std::size_t j{ i + 1 }; j < result.rows(); ++j )
         {
-            result( i, 1 ) -= matrix( i, j ) * result( j, 1 );
+            result( i, 0 ) -= matrix( i, j ) * result( j, 0 );
         }
-        result( i, 1 ) /= matrix( i, i );
+        result( i, 0 ) /= matrix( i, i );
+
+        if ( i == 0 )
+        {
+            break;
+        }
     }
 
     return result;
