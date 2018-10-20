@@ -34,3 +34,6 @@ target_link_libraries( hw01t03 PRIVATE caas )
 
 add_executable( hw01t04 ${CMAKE_CURRENT_LIST_DIR}/src/homework_01/task_04/main.cpp )
 target_link_libraries( hw01t04 PRIVATE caas )
+
+add_executable( hw01t05 ${CMAKE_CURRENT_LIST_DIR}/src/homework_01/task_05/main.cpp )
+target_link_libraries( hw01t05 PRIVATE caas )
