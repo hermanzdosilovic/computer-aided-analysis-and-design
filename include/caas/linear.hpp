@@ -2,6 +2,7 @@
 
 #include "lup.hpp"
 #include "supstitution.hpp"
+#include "utils/log.hpp"
 
 #include <cassert>
 #include <utility>
