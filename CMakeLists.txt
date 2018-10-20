@@ -7,6 +7,7 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 option( ENABLE_TRACE "Enable code trace." OFF )
 
 add_library( caas INTERFACE )
+target_link_libraries( caas INTERFACE m )
 target_include_directories( caas INTERFACE ${CMAKE_CURRENT_LIST_DIR}/include )
 if ( NOT ENABLE_TRACE )
     target_compile_definitions( caas INTERFACE NTRACE )
@@ -27,3 +28,6 @@ target_link_libraries( hw01t01 PRIVATE caas )
 
 add_executable( hw01t02 ${CMAKE_CURRENT_LIST_DIR}/src/homework_01/task_02/main.cpp )
 target_link_libraries( hw01t02 PRIVATE caas )
+
+add_executable( hw01t03 ${CMAKE_CURRENT_LIST_DIR}/src/homework_01/task_03/main.cpp )
+target_link_libraries( hw01t03 PRIVATE caas )

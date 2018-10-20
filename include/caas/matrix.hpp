@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <fstream>
 #include <istream>
@@ -344,6 +345,24 @@ public:
         {
             std::swap( ( *this )( k, i ), ( *this )( k, j ) );
         }
+    }
+
+    bool hasNan() const noexcept
+    {
+        for ( auto const & v : *this )
+        {
+            if ( std::isnan( v ) ) { return true; }
+        }
+        return false;
+    }
+
+    bool hasInf() const noexcept
+    {
+        for ( auto const & v : *this )
+        {
+            if ( std::isinf( v ) ) { return true; }
+        }
+        return false;
     }
 
     double * const begin() noexcept { return data_.get();         }
