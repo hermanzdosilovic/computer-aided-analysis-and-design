@@ -365,11 +365,11 @@ public:
         return false;
     }
 
-    double * const begin() noexcept { return data_.get();         }
-    double * const end()   noexcept { return data_.get() + size_; }
+    value_type * const begin() noexcept { return data_.get();         }
+    value_type * const end()   noexcept { return data_.get() + size_; }
 
-    double const * const begin() const noexcept { return data_.get();         }
-    double const * const end()   const noexcept { return data_.get() + size_; }
+    value_type const * const begin() const noexcept { return data_.get();         }
+    value_type const * const end()   const noexcept { return data_.get() + size_; }
 
     Matrix & setRandom()
     {
