@@ -5,12 +5,16 @@ set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
 option( ENABLE_TRACE "Enable code trace." OFF )
+option( ENABLE_COLORED_LOG "Enable colored log." OFF )
 
 add_library( caas INTERFACE )
 target_link_libraries( caas INTERFACE m )
 target_include_directories( caas INTERFACE ${CMAKE_CURRENT_LIST_DIR}/include )
 if ( NOT ENABLE_TRACE )
     target_compile_definitions( caas INTERFACE NTRACE )
+endif()
+if ( ENABLE_COLORED_LOG )
+    target_compile_definitions( caas INTERFACE COLORED_LOG )
 endif()
 
 # add_library( eigen INTERFACE )
@@ -40,3 +44,6 @@ target_link_libraries( hw01t05 PRIVATE caas )
 
 add_executable( hw01t06 ${CMAKE_CURRENT_LIST_DIR}/src/homework_01/task_06/main.cpp )
 target_link_libraries( hw01t06 PRIVATE caas )
+
+add_executable( hw02t01golden ${CMAKE_CURRENT_LIST_DIR}/src/homework_02/task_01/golden.cpp )
+target_link_libraries( hw02t01golden PRIVATE caas )
