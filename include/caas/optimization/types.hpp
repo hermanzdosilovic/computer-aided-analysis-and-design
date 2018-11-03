@@ -15,7 +15,7 @@ using Point = std::array< double, N >;
 }
 
 template< std::size_t N >
-caas::Point< N > operator+=( caas::Point< N > & p1, caas::Point< N > const & p2 )
+caas::Point< N > & operator+=( caas::Point< N > & p1, caas::Point< N > const & p2 )
 {
     for ( auto i{ 0 }; i < N; ++i )
     {
@@ -33,7 +33,7 @@ caas::Point< N > operator+( caas::Point< N > const & p1, caas::Point< N > const 
 }
 
 template< std::size_t N >
-caas::Point< N > operator-=( caas::Point< N > & p1, caas::Point< N > const & p2 )
+caas::Point< N > & operator-=( caas::Point< N > & p1, caas::Point< N > const & p2 )
 {
     for ( auto i{ 0 }; i < N; ++i )
     {
@@ -63,14 +63,32 @@ bool operator<=( caas::Point< N > const & p1, caas::Point< N > const & p2 )
     return true;
 }
 
+template< std::size_t N >
+double operator*( caas::Point< N > const & p1, caas::Point< N > const & p2 )
+{
+    double result{ 0 };
+    for ( auto i{ 0 }; i < N; ++i )
+    {
+        result += p1[ i ] * p2[ i ];
+    }
+    return result;
+}
+
+template< std::size_t N, typename T >
+caas::Point< N > & operator*=( caas::Point< N > & p, T const t )
+{
+    for ( auto & i : p )
+    {
+        i *= t;
+    }
+    return p;
+}
+
 template< std::size_t N, typename T >
 caas::Point< N > operator*( T const t, caas::Point< N > const & p )
 {
     auto other{ p };
-    for ( auto i{ 0 }; i < N; ++i )
-    {
-        other[ i ] *= t;
-    }
+    other *= t;
     return other;
 }
 
