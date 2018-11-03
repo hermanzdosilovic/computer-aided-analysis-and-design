@@ -57,3 +57,6 @@ target_link_libraries( hw02t01simplex PRIVATE caas )
 
 add_executable( hw02t01hooke_jeeves ${CMAKE_CURRENT_LIST_DIR}/src/homework_02/task_01/hooke_jeeves.cpp )
 target_link_libraries( hw02t01hooke_jeeves PRIVATE caas )
+
+add_executable( hw02t02 ${CMAKE_CURRENT_LIST_DIR}/src/homework_02/task_02/main.cpp )
+target_link_libraries( hw02t02 PRIVATE caas )
