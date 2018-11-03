@@ -45,5 +45,9 @@ target_link_libraries( hw01t05 PRIVATE caas )
 add_executable( hw01t06 ${CMAKE_CURRENT_LIST_DIR}/src/homework_01/task_06/main.cpp )
 target_link_libraries( hw01t06 PRIVATE caas )
 
+
 add_executable( hw02t01golden ${CMAKE_CURRENT_LIST_DIR}/src/homework_02/task_01/golden.cpp )
 target_link_libraries( hw02t01golden PRIVATE caas )
+
+add_executable( hw02t01axis ${CMAKE_CURRENT_LIST_DIR}/src/homework_02/task_01/axis.cpp )
+target_link_libraries( hw02t01axis PRIVATE caas )

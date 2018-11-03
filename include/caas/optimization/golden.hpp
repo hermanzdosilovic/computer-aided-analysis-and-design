@@ -120,7 +120,7 @@ double golden( Function f, std::pair< double, double > const & interval, double 
 }
 
 template< typename Function >
-double golden( Function f, double const x0, double const step = 0.1, double const precision = 1e-6 )
+double golden( Function f, double const x0, double const precision = 1e-6, double const step = 0.1 )
 {
     return golden( f, unimodal_interval( f, x0 , step ), precision );
 }
