@@ -9,24 +9,17 @@
 namespace caas::function
 {
 
-namespace internal {
-template< typename InputIt >
-double series( InputIt first, InputIt last )
-{
-    std::uint16_t i{ 1 };
-    double result{ 0 };
-    for ( ; first != last; ++first, ++i )
-    {
-        result += ( *first - i ) * ( *first - i );
-    }
-    return result;
-}
-}
-
 template< typename T >
 double series( T const & v )
 {
-    return internal::series( std::begin( v ), std::end( v ) );
+    std::uint16_t i{ 1 };
+    double result{ 0 };
+    for ( auto const & x : v )
+    {
+        result += std::pow( x - i, 2 );
+        ++i;
+    }
+    return result;
 }
 
 double rosenbrock( caas::Point< 2 > const & p )
@@ -40,4 +33,17 @@ double yeti( caas::Point< 2 > const & p )
     auto const & x2{ std::get< 1 >( p ) };
     return std::abs( ( x1 - x2 ) * ( x1 + x2 ) ) + std::hypot( x1, x2 );
 }
+
+template< typename T >
+double shafferf6( T const & p )
+{
+    double sum{ 0 };
+    for ( auto const & i : p )
+    {
+        sum += i * i;
+    }
+
+    return 0.5 + ( std::pow( std::sin( sum ), 2 ) - 0.5 ) / std::pow( 1 + 0.001 * sum , 2);
+}
+
 }
