@@ -24,14 +24,12 @@ double series( T const & v )
 
 double rosenbrock( caas::Point< 2 > const & p )
 {
-    return 100 * std::pow( std::get< 1 >( p ) - std::pow( std::get< 0 >( p ), 2 ), 2 ) + std::pow( 1 - std::get< 0 >( p ), 2 );
+    return 100 * std::pow( p[ 1 ] - std::pow( p[ 0 ], 2 ), 2 ) + std::pow( 1 - p[ 0 ], 2 );
 }
 
 double yeti( caas::Point< 2 > const & p )
 {
-    auto const & x1{ std::get< 0 >( p ) };
-    auto const & x2{ std::get< 1 >( p ) };
-    return std::abs( ( x1 - x2 ) * ( x1 + x2 ) ) + std::hypot( x1, x2 );
+    return std::abs( ( p[ 0 ] - p[ 1 ] ) * ( p[ 0 ] + p[ 1 ] ) ) + std::hypot( p[ 0 ], p[ 1 ] );
 }
 
 template< typename T >
