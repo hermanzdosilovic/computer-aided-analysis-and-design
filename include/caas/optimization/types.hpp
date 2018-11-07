@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <cmath>
 #include <cstddef>
 #include <ostream>
 #include <sstream>
@@ -104,6 +105,12 @@ caas::Point< N > abs( caas::Point< N > const & p )
         i = std::abs( i );
     }
     return other;
+}
+
+template< std::size_t N >
+double norm( caas::Point< N > const & p )
+{
+    return std::sqrt( p * p );
 }
 
 template< std::size_t N >
