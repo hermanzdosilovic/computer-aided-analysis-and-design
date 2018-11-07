@@ -50,7 +50,7 @@ T axis( Function f, T const & x0, T const & precision )
             LOG_INFO( "Iteration %u: lambda[%d] = %f\n", iteration, i, lambda );
         }
         ++iteration;
-    } while ( std::abs( x - y ) <= precision );
+    } while ( !( std::abs( x - y ) <= precision ) );
 
     ITERATION_LOG();
     LOG_INFO( "Total number of function calls: %u\n", functionCalls );
