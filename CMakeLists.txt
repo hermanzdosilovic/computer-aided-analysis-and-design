@@ -62,5 +62,15 @@ target_link_libraries( hw02t04 PRIVATE caas )
 add_executable( hw02t05 ${CMAKE_CURRENT_LIST_DIR}/src/homework_02/task_05/main.cpp )
 target_link_libraries( hw02t05 PRIVATE caas )
 
-add_executable( hw04t01 ${CMAKE_CURRENT_LIST_DIR}/src/homework_04/task_01/main.cpp )
-target_link_libraries( hw04t01 PRIVATE caas )
+
+add_executable( hw04t01f1_decimal ${CMAKE_CURRENT_LIST_DIR}/src/homework_04/task_01/f1_decimal.cpp )
+target_link_libraries( hw04t01f1_decimal PRIVATE caas )
+
+add_executable( hw04t01f3_decimal ${CMAKE_CURRENT_LIST_DIR}/src/homework_04/task_01/f3_decimal.cpp )
+target_link_libraries( hw04t01f3_decimal PRIVATE caas )
+
+add_executable( hw04t01f6_decimal ${CMAKE_CURRENT_LIST_DIR}/src/homework_04/task_01/f6_decimal.cpp )
+target_link_libraries( hw04t01f6_decimal PRIVATE caas )
+
+add_executable( hw04t01f7_decimal ${CMAKE_CURRENT_LIST_DIR}/src/homework_04/task_01/f7_decimal.cpp )
+target_link_libraries( hw04t01f7_decimal PRIVATE caas )
