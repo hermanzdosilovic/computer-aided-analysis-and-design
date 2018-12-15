@@ -7,8 +7,10 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 option( ENABLE_TRACE "Enable code trace." OFF )
 option( ENABLE_COLORED_LOG "Enable colored log." OFF )
 
+add_subdirectory( ${CMAKE_CURRENT_LIST_DIR}/third_party/ecfcpp )
+
 add_library( caas INTERFACE )
-target_link_libraries( caas INTERFACE m )
+target_link_libraries( caas INTERFACE ecfcpp m )
 target_include_directories( caas INTERFACE ${CMAKE_CURRENT_LIST_DIR}/include )
 if ( NOT ENABLE_TRACE )
     target_compile_definitions( caas INTERFACE NTRACE )
@@ -16,16 +18,6 @@ endif()
 if ( ENABLE_COLORED_LOG )
     target_compile_definitions( caas INTERFACE COLORED_LOG )
 endif()
-
-# add_library( eigen INTERFACE )
-# target_include_directories( eigen INTERFACE ${CMAKE_CURRENT_LIST_DIR}/third_party/Eigen )
-#
-# add_executable( test
-#     ${CMAKE_CURRENT_LIST_DIR}/test/main.cpp
-#     ${CMAKE_CURRENT_LIST_DIR}/test/matrix_test.cpp
-# )
-# target_include_directories( test PRIVATE ${CMAKE_CURRENT_LIST_DIR}/third_party/Catch2/single_include )
-# target_link_libraries( test PRIVATE caas eigen )
 
 add_executable( hw01t01 ${CMAKE_CURRENT_LIST_DIR}/src/homework_01/task_01/main.cpp )
 target_link_libraries( hw01t01 PRIVATE caas )
@@ -69,3 +61,6 @@ target_link_libraries( hw02t04 PRIVATE caas )
 
 add_executable( hw02t05 ${CMAKE_CURRENT_LIST_DIR}/src/homework_02/task_05/main.cpp )
 target_link_libraries( hw02t05 PRIVATE caas )
+
+add_executable( hw04t01 ${CMAKE_CURRENT_LIST_DIR}/src/homework_04/task_01/main.cpp )
+target_link_libraries( hw04t01 PRIVATE caas )
