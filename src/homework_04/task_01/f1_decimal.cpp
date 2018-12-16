@@ -5,7 +5,7 @@
 
 int main()
 {
-    constexpr std::size_t numberOfComponents{ 3 };
+    constexpr std::size_t numberOfComponents{ 5 };
     constexpr std::size_t populationSize{ 30 };
 
     constexpr bool        enableElitism{ true };
@@ -15,11 +15,11 @@ int main()
 
     constexpr std::size_t tournamentSize{ 3 };
 
-    constexpr float lambda{ 0.1 };
+    constexpr float lambda{ 0.2 };
 
-    constexpr float mutationProbability{ 0.1 };
+    constexpr float mutationProbability{ 0.5 };
     constexpr bool  forceMutation{ true };
-    constexpr float sigma{ 0.1 };
+    constexpr float sigma{ 0.001 };
 
     constexpr auto logFrequency{ 10000 };
 
