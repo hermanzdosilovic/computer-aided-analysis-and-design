@@ -80,3 +80,9 @@ target_link_libraries( hw04t01f1_binary PRIVATE caas )
 
 add_executable( hw04t01f3_binary ${CMAKE_CURRENT_LIST_DIR}/src/homework_04/task_01/f3_binary.cpp )
 target_link_libraries( hw04t01f3_binary PRIVATE caas )
+
+add_executable( hw04t01f6_binary ${CMAKE_CURRENT_LIST_DIR}/src/homework_04/task_01/f6_binary.cpp )
+target_link_libraries( hw04t01f6_binary PRIVATE caas )
+
+add_executable( hw04t01f7_binary ${CMAKE_CURRENT_LIST_DIR}/src/homework_04/task_01/f7_binary.cpp )
+target_link_libraries( hw04t01f7_binary PRIVATE caas )
