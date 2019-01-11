@@ -1,7 +1,7 @@
 # Computer Aided Analysis and Design
 
 You will need:
-- [GCC](https://gcc.gnu.org/) - version `8.2` or later.
+- [GCC](https://gcc.gnu.org/) - version with [C++17 support](https://en.cppreference.com/w/cpp/compiler_support).
 - [CMake](https://cmake.org/) - version `3.12` or later.
 - [GNU Make](https://www.gnu.org/software/make/) - version `4.2` or later.
 
