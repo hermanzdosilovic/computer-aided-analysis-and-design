@@ -74,12 +74,12 @@ void decompose( Matrix & matrix, Matrix & vector, Strategy const strategy = Stra
     }
 }
 
-std::pair< Matrix, Matrix > decompose( Matrix const & matrix, Strategy const strategy = Strategy::LUP, double const precision = 1e-5 )
+auto decompose( Matrix const & matrix, Strategy const strategy = Strategy::LUP, double const precision = 1e-5 )
 {
     Matrix copy{ matrix };
     Matrix permutationMatrix = Matrix::Identity( copy.rows() );
     decompose( copy, permutationMatrix, strategy, precision );
-    return { permutationMatrix, copy };
+    return std::pair{ permutationMatrix, copy };
 }
 
 }
