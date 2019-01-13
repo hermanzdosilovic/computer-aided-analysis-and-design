@@ -1,3 +1,6 @@
 [submodule "third_party/ecfcpp"]
 	path = third_party/ecfcpp
 	url = https://github.com/hermanzdosilovic/ecfcpp.git
+[submodule "third_party/sciplot"]
+	path = third_party/sciplot
+	url = https://github.com/sciplot/sciplot.git

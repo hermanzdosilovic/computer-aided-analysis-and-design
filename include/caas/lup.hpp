@@ -37,7 +37,7 @@ void decompose( Matrix & matrix, Matrix & vector, Strategy const strategy = Stra
                 break;
             }
 
-            double maxAbsPivot{ std::abs( matrix( i, i ) ) };
+            auto maxAbsPivot{ std::abs( matrix( i, i ) ) };
             std::size_t index{ i };
             for ( std::size_t j{ i + 1 }; j < matrix.rows(); ++j )
             {

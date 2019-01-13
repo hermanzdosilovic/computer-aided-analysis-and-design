@@ -108,3 +108,7 @@ target_link_libraries( hw05t01 PRIVATE caas )
 
 add_executable( hw05t02 ${CMAKE_CURRENT_LIST_DIR}/src/homework_05/task_02/main.cpp )
 target_link_libraries( hw05t02 PRIVATE caas )
+
+add_executable( hw05t03trapeze ${CMAKE_CURRENT_LIST_DIR}/src/homework_05/task_03/trapeze.cpp )
+target_link_libraries( hw05t03trapeze PRIVATE caas )
+target_include_directories( hw05t03trapeze PRIVATE ${CMAKE_CURRENT_LIST_DIR}/third_party/sciplot )

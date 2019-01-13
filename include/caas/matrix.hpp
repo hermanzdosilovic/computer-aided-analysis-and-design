@@ -202,8 +202,8 @@ public:
     {
         assert( rows_ == other.rows_ );
         assert( cols_ == other.cols_ );
-        Matrix copy{ other };
-        copy += *this;
+        Matrix copy{ *this };
+        copy += other;
         return copy;
     }
 
@@ -237,8 +237,8 @@ public:
     {
         assert( rows_ == other.rows_ );
         assert( cols_ == other.cols_ );
-        Matrix copy{ other };
-        copy -= *this;
+        Matrix copy{ *this };
+        copy -= other;
         return copy;
     }
 
