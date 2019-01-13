@@ -113,6 +113,14 @@ add_executable( hw05t03trapeze ${CMAKE_CURRENT_LIST_DIR}/src/homework_05/task_03
 target_link_libraries( hw05t03trapeze PRIVATE caas )
 target_include_directories( hw05t03trapeze PRIVATE ${CMAKE_CURRENT_LIST_DIR}/third_party/sciplot )
 
+add_executable( hw05t03runge_kutta ${CMAKE_CURRENT_LIST_DIR}/src/homework_05/task_03/runge_kutta.cpp )
+target_link_libraries( hw05t03runge_kutta PRIVATE caas )
+target_include_directories( hw05t03runge_kutta PRIVATE ${CMAKE_CURRENT_LIST_DIR}/third_party/sciplot )
+
 add_executable( hw05t04trapeze ${CMAKE_CURRENT_LIST_DIR}/src/homework_05/task_04/trapeze.cpp )
 target_link_libraries( hw05t04trapeze PRIVATE caas )
 target_include_directories( hw05t04trapeze PRIVATE ${CMAKE_CURRENT_LIST_DIR}/third_party/sciplot )
+
+add_executable( hw05t04runge_kutta ${CMAKE_CURRENT_LIST_DIR}/src/homework_05/task_04/runge_kutta.cpp )
+target_link_libraries( hw05t04runge_kutta PRIVATE caas )
+target_include_directories( hw05t04runge_kutta PRIVATE ${CMAKE_CURRENT_LIST_DIR}/third_party/sciplot )
