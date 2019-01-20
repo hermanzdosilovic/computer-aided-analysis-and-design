@@ -63,6 +63,13 @@ add_executable( hw02t05 ${CMAKE_CURRENT_LIST_DIR}/src/homework_02/task_05/main.c
 target_link_libraries( hw02t05 PRIVATE caas )
 
 
+add_executable( hw03t01 ${CMAKE_CURRENT_LIST_DIR}/src/homework_03/task_01/main.cpp )
+target_link_libraries( hw03t01 PRIVATE caas )
+
+add_executable( hw03t02f1_gradient_descent ${CMAKE_CURRENT_LIST_DIR}/src/homework_03/task_02/f1gradient_descent.cpp )
+target_link_libraries( hw03t02f1_gradient_descent PRIVATE caas )
+
+
 add_executable( hw04t01f1_decimal ${CMAKE_CURRENT_LIST_DIR}/src/homework_04/task_01/f1_decimal.cpp )
 target_link_libraries( hw04t01f1_decimal PRIVATE caas )
 
