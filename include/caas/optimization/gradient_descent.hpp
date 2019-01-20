@@ -1,6 +1,5 @@
 #pragma once
 
-#include "types.hpp"
 #include "golden.hpp"
 
 #include <cstdint>
@@ -24,7 +23,7 @@ auto gradient_descent
     auto gradient{ f.gradient( x ) };
     auto i{ 0 };
 
-    for (; std::norm( gradient ) > precision; ++i )
+    for (; norm( gradient ) > precision; ++i )
     {
         if ( useOptimalStep )
         {

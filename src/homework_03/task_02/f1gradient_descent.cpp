@@ -10,7 +10,7 @@ int main()
     using Point = caas::Point< 2 >;
 
     F1 f;
-    auto result{ caas::optimization::gradient_descent( f, caas::Point< 2 >{ -1.9, 2 }, 1e-3, 1e-7, true, 1000 ) };
+    auto result{ caas::optimization::gradient_descent( f, Point{ -1.9, 2 }, 1e-3, 1e-7, true, 1000 ) };
 
     std::cout << "Result: " << result << '\n';
     std::cout << "Function calls: " << f.functionCalls() << '\n';

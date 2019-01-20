@@ -365,11 +365,11 @@ public:
         return false;
     }
 
-    value_type * const begin() noexcept { return data_.get();         }
-    value_type * const end()   noexcept { return data_.get() + size_; }
+    value_type * begin() noexcept { return data_.get();         }
+    value_type * end()   noexcept { return data_.get() + size_; }
 
-    value_type const * const begin() const noexcept { return data_.get();         }
-    value_type const * const end()   const noexcept { return data_.get() + size_; }
+    value_type const * begin() const noexcept { return data_.get();         }
+    value_type const * end()   const noexcept { return data_.get() + size_; }
 
     Matrix & setRandom()
     {
@@ -413,23 +413,22 @@ private:
     std::unique_ptr< value_type[] > data_;
 };
 
+}
+
 template< typename T >
-Matrix operator*( T const constant, Matrix const & matrix )
+caas::Matrix operator*( T const constant, caas::Matrix const & matrix )
 {
     return matrix * constant;
 }
 
 template< typename T >
-Matrix operator/( T const constant, Matrix const & matrix )
+caas::Matrix operator/( T const constant, caas::Matrix const & matrix )
 {
     return matrix / constant;
 }
 
 template< typename T >
-Matrix operator+( T const constant, Matrix const & matrix )
+caas::Matrix operator+( T const constant, caas::Matrix const & matrix )
 {
     return matrix + constant;
 }
-
-}
-

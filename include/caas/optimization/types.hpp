@@ -36,7 +36,7 @@ caas::Point< N > operator+( caas::Point< N > const & p1, caas::Point< N > const 
 template< std::size_t N >
 caas::Point< N > & operator-=( caas::Point< N > & p1, caas::Point< N > const & p2 )
 {
-    for ( auto i{ 0 }; i < N; ++i )
+    for ( std::size_t i{ 0 }; i < N; ++i )
     {
         p1[ i ] -= p2[ i ];
     }
@@ -68,7 +68,7 @@ template< std::size_t N >
 double operator*( caas::Point< N > const & p1, caas::Point< N > const & p2 )
 {
     double result{ 0 };
-    for ( auto i{ 0 }; i < N; ++i )
+    for ( std::size_t i{ 0 }; i < N; ++i )
     {
         result += p1[ i ] * p2[ i ];
     }

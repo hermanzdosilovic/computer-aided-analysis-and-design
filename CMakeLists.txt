@@ -4,6 +4,13 @@ project( caas LANGUAGES CXX )
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
+set(
+    CMAKE_CXX_FLAGS
+    "${CMAKE_CXX_FLAGS} -Wall -Wextra \
+    -Wold-style-cast -Wuseless-cast -Wnull-dereference \
+    -Werror -Wfatal-errors -pedantic -pedantic-errors"
+)
+
 option( ENABLE_TRACE "Enable code trace." OFF )
 option( ENABLE_COLORED_LOG "Enable colored log." OFF )
 
@@ -68,6 +75,9 @@ target_link_libraries( hw03t01 PRIVATE caas )
 
 add_executable( hw03t02f1_gradient_descent ${CMAKE_CURRENT_LIST_DIR}/src/homework_03/task_02/f1gradient_descent.cpp )
 target_link_libraries( hw03t02f1_gradient_descent PRIVATE caas )
+
+add_executable( hw03t02f1_newton_raphson ${CMAKE_CURRENT_LIST_DIR}/src/homework_03/task_02/f1newton_raphson.cpp )
+target_link_libraries( hw03t02f1_newton_raphson PRIVATE caas )
 
 
 add_executable( hw04t01f1_decimal ${CMAKE_CURRENT_LIST_DIR}/src/homework_04/task_01/f1_decimal.cpp )
