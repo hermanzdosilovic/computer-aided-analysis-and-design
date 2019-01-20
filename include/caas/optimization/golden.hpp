@@ -14,7 +14,7 @@ constexpr double kGoldenRatio{ 1.61803398874989484820458683436563811772030917980
 constexpr double kIntervalRatio{ kGoldenRatio - 1 };
 
 template< typename Function >
-std::pair< double, double > unimodal_interval( Function f, double const x0, double const step )
+auto unimodal_interval( Function && f, double const x0, double const step )
 {
     #define ITERATION_LOG() LOG_INFO( "Iteration %u: f(left=%f) = %f, f(middle=%f) = %f, f(right=%f) = %f\n", iteration, left, fLeft, middle, fMiddle, right, fRight )
 
@@ -30,7 +30,7 @@ std::pair< double, double > unimodal_interval( Function f, double const x0, doub
     std::uint16_t functionCalls{ 3 };
     std::uint16_t powerOfTwo{ 1 };
 
-    ITERATION_LOG();
+    //ITERATION_LOG();
 
     if ( fMiddle > fRight )
     {
@@ -44,7 +44,7 @@ std::pair< double, double > unimodal_interval( Function f, double const x0, doub
             fRight = f( right );
             ++functionCalls;
             ++iteration;
-            ITERATION_LOG();
+            //ITERATION_LOG();
         } while ( fMiddle > fRight );
     }
     else if ( fMiddle > fLeft )
@@ -63,15 +63,15 @@ std::pair< double, double > unimodal_interval( Function f, double const x0, doub
         } while ( fMiddle > fLeft );
     }
 
-    LOG_INFO( "Total number of function calls: %u\n", functionCalls );
+    //LOG_INFO( "Total number of function calls: %u\n", functionCalls );
 
     #undef ITERATION_LOG
 
-    return { left, right };
+    return std::pair{ left, right };
 }
 
 template< typename Function >
-double golden( Function f, std::pair< double, double > const & interval, double const precision = 1e-6 )
+auto golden( Function && f, std::pair< double, double > const & interval, double const precision = 1e-6 )
 {
     #define ITERATION_LOG() LOG_INFO( "Iteration %u: [%f, %f, %f, %f] f(%f) = %f, f(%f) = %f\n", iteration, left, middleLeft, middleRight, right, middleLeft, fMiddleLeft, middleRight, fMiddleRight )
 
@@ -87,7 +87,7 @@ double golden( Function f, std::pair< double, double > const & interval, double 
     std::uint16_t iteration{ 0 };
     std::uint16_t functionCalls{ 2 };
 
-    ITERATION_LOG();
+    //ITERATION_LOG();
 
     while( std::abs( right - left ) > precision )
     {
@@ -109,10 +109,10 @@ double golden( Function f, std::pair< double, double > const & interval, double 
         }
         ++functionCalls;
         ++iteration;
-        ITERATION_LOG();
+        //ITERATION_LOG();
     }
 
-    LOG_INFO( "Total number of function calls: %u\n", functionCalls );
+    //LOG_INFO( "Total number of function calls: %u\n", functionCalls );
 
     #undef ITERATION_LOG
 
@@ -120,7 +120,7 @@ double golden( Function f, std::pair< double, double > const & interval, double 
 }
 
 template< typename Function >
-double golden( Function f, double const x0, double const precision = 1e-6, double const step = 0.1 )
+auto golden( Function && f, double const x0, double const precision = 1e-6, double const step = 0.1 )
 {
     return golden( f, unimodal_interval( f, x0 , step ), precision );
 }
