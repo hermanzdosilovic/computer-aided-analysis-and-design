@@ -1,4 +1,4 @@
-#include "../f1.hpp"
+#include "../f2.hpp"
 
 #include <caas/optimization/newton_raphson.hpp>
 #include <caas/optimization/types.hpp>
@@ -9,8 +9,8 @@ int main()
 {
     using Point = caas::Point< 2 >;
 
-    F1 f;
-    auto result{ caas::optimization::newton_raphson( f, Point{ -1.9, 2 }, 0, 1e-5, true, 1 ) };
+    F2 f;
+    auto result{ caas::optimization::newton_raphson( f, Point{ 0.1, 0.3 }, 0, 1e-5, true, 1 ) };
 
     std::cout << "Result: " << result << '\n';
 

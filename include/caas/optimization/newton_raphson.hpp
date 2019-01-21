@@ -4,6 +4,7 @@
 #include <caas/linear.hpp>
 #include <caas/matrix.hpp>
 
+#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <iterator>
@@ -30,7 +31,7 @@ auto newton_raphson
     {
         [ & x ]( auto const & gradient, auto const & hessian )
         {
-            auto const directionVector{ ( hessian * gradient ) };
+            auto const directionVector{ ( hessian * gradient ) / norm( hessian * gradient ) };
             auto direction{ x };
 
             std::size_t i{ 0 };
@@ -45,9 +46,28 @@ auto newton_raphson
 
     auto direction{ getDirection( gradient, hessian ) };
 
+    auto lastFunctionValue{ f( x ) };
+    std::uint8_t converganceCounter{ 0 };
+
     auto i{ 0 };
     for (; norm( direction ) > precision; ++i )
     {
+        auto const currentFunctionValue{ f( x ) };
+        if ( std::abs( lastFunctionValue - currentFunctionValue ) < 1e-10 )
+        {
+            ++converganceCounter;
+            if ( converganceCounter == 100 )
+            {
+                break;
+            }
+        }
+        else
+        {
+            converganceCounter = 0;
+        }
+
+        lastFunctionValue = currentFunctionValue;
+    
         if ( useOptimalStep )
         {
             step = golden
@@ -62,7 +82,7 @@ auto newton_raphson
 
         if ( logFrequency > 0 && i % logFrequency == 0 )
         {
-            std::cout << i << ") x = " << x << "; step = " << step << "; direction = " << direction << '\n';
+            std::cout << i << ") x = " << x << "; f(x) = " << lastFunctionValue << "; step = " << step << "; direction = " << direction << '\n';
         }
 
         x -= step * direction;
@@ -74,7 +94,13 @@ auto newton_raphson
 
     if ( logFrequency > 0 )
     {
-        std::cout << i << ") x = " << x << "; step = " << step << "; direction = " << direction << '\n';
+        lastFunctionValue = f( x );
+        std::cout << i << ") x = " << x << "; f(x) = " << lastFunctionValue << "; step = " << step << "; direction = " << direction << '\n';
+    }
+
+    if ( converganceCounter == 100 )
+    {
+        std::cout << "Newton-Raphson method does not converge.\n";
     }
 
     return x;

@@ -79,6 +79,12 @@ target_link_libraries( hw03t02f1_gradient_descent PRIVATE caas )
 add_executable( hw03t02f1_newton_raphson ${CMAKE_CURRENT_LIST_DIR}/src/homework_03/task_02/f1newton_raphson.cpp )
 target_link_libraries( hw03t02f1_newton_raphson PRIVATE caas )
 
+add_executable( hw03t02f2_gradient_descent ${CMAKE_CURRENT_LIST_DIR}/src/homework_03/task_02/f2gradient_descent.cpp )
+target_link_libraries( hw03t02f2_gradient_descent PRIVATE caas )
+
+add_executable( hw03t02f2_newton_raphson ${CMAKE_CURRENT_LIST_DIR}/src/homework_03/task_02/f2newton_raphson.cpp )
+target_link_libraries( hw03t02f2_newton_raphson PRIVATE caas )
+
 
 add_executable( hw04t01f1_decimal ${CMAKE_CURRENT_LIST_DIR}/src/homework_04/task_01/f1_decimal.cpp )
 target_link_libraries( hw04t01f1_decimal PRIVATE caas )

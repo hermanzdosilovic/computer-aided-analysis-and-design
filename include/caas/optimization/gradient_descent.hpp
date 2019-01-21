@@ -23,8 +23,27 @@ auto gradient_descent
     auto gradient{ f.gradient( x ) };
     auto i{ 0 };
 
+    auto lastFunctionValue{ f( x ) };
+    std::uint16_t converganceCounter{ 0 };
+
     for (; norm( gradient ) > precision; ++i )
     {
+        auto const currentFunctionValue{ f( x ) };
+        if ( std::abs( lastFunctionValue - currentFunctionValue ) < 1e-12 )
+        {
+            ++converganceCounter;
+            if ( converganceCounter == 100 )
+            {
+                break;
+            }
+        }
+        else
+        {
+            converganceCounter = 0;
+        }
+
+        lastFunctionValue = currentFunctionValue;
+
         if ( useOptimalStep )
         {
             step = golden
@@ -39,7 +58,7 @@ auto gradient_descent
 
         if ( logFrequency > 0 && i % logFrequency == 0 )
         {
-            std::cout << i << ") x = " << x << "; step = " << step << "; gradient = " << gradient << '\n';
+            std::cout << i << ") x = " << x << "; f(x) = " << lastFunctionValue << "; step = " << step << "; gradient = " << gradient << '\n';
         }
 
         x -= step * gradient;
@@ -49,7 +68,13 @@ auto gradient_descent
 
     if ( logFrequency > 0 )
     {
-        std::cout << i << ") x = " << x << "; step = " << step << "; gradient = " << gradient << '\n';
+        lastFunctionValue = f( x );
+        std::cout << i << ") x = " << x << "; f(x) = " << lastFunctionValue << "; step = " << step << "; gradient = " << gradient << '\n';
+    }
+
+    if ( converganceCounter == 100 )
+    {
+        std::cout << "Gradient descent method does not converge.\n";
     }
 
     return x;
