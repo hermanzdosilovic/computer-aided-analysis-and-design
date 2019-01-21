@@ -57,7 +57,7 @@ Matrix inverse( Matrix const & matrix )
     }
 
     Matrix identity{ Matrix::Identity( lu.rows() ) };
-    if ( !identity.compare( matrix * lu ) || lu.hasNan() || lu.hasInf() )
+    if ( lu.hasNan() || lu.hasInf() )
     {
         LOG_ERROR( "Matirx does not have inverse." );
     }

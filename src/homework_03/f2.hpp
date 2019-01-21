@@ -35,8 +35,8 @@ public:
         caas::Matrix result{ 2, 2 };
         result( 0, 0 ) = 2;
         result( 0, 1 ) = 0;
-        result( 1, 0 ) = 8;
-        result( 1, 1 ) = 0;
+        result( 1, 0 ) = 0;
+        result( 1, 1 ) = 8;
 
         return result;
     }

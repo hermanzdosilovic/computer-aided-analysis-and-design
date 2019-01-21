@@ -23,51 +23,39 @@ auto newton_raphson
     std::uint32_t const logFrequency = 0
 )
 {
-    auto x{ x0 };
-    auto gradient{ caas::Matrix::WithData( f.gradient( x ), std::size( x ), 1 ) };
-    auto hessian{ linear::inverse( f.hessian( x ) ) };
-    
     auto getDirection
     {
-        [ & x ]( auto const & gradient, auto const & hessian )
+        []( auto & f, auto const & x )
         {
-            auto const directionVector{ ( hessian * gradient ) / norm( hessian * gradient ) };
+            auto const hessian { linear::inverse( f.hessian( x ) ) };
+            auto const gradient{ caas::Matrix::WithData( f.gradient( x ), std::size( x ), 1 ) };
+            auto const hessianDotGradient{ hessian * gradient };
+
+            auto const directionVector{ hessianDotGradient / norm( hessianDotGradient ) };
+
             auto direction{ x };
 
-            std::size_t i{ 0 };
-            for ( auto const v : directionVector )
-            {
-                direction[ i++ ] = v;
-            }
+            std::generate
+            (
+                std::begin( direction ),
+                std::end  ( direction ),
+                [ it = std::begin( directionVector ), end = std::end( directionVector ) ]() mutable
+                {
+                    assert( it != end );
+                    return *(it++);
+                }
+            );
 
             return direction;
         }
     };
 
-    auto direction{ getDirection( gradient, hessian ) };
+    auto x{ x0 };
 
-    auto lastFunctionValue{ f( x ) };
-    std::uint8_t converganceCounter{ 0 };
-
-    auto i{ 0 };
-    for (; norm( direction ) > precision; ++i )
+    for ( std::size_t i{ 0 }; ; ++i )
     {
-        auto const currentFunctionValue{ f( x ) };
-        if ( std::abs( lastFunctionValue - currentFunctionValue ) < 1e-10 )
-        {
-            ++converganceCounter;
-            if ( converganceCounter == 100 )
-            {
-                break;
-            }
-        }
-        else
-        {
-            converganceCounter = 0;
-        }
+        auto direction{ getDirection( f, x ) };
 
-        lastFunctionValue = currentFunctionValue;
-    
         if ( useOptimalStep )
         {
             step = golden
@@ -82,25 +70,17 @@ auto newton_raphson
 
         if ( logFrequency > 0 && i % logFrequency == 0 )
         {
-            std::cout << i << ") x = " << x << "; f(x) = " << lastFunctionValue << "; step = " << step << "; direction = " << direction << '\n';
+            std::cout << i << ") x = " << x << "; step = " << step << "; direction = " << direction << '\n';
         }
 
-        x -= step * direction;
+        direction *= step;
 
-        gradient = caas::Matrix::WithData( f.gradient( x ), std::size( x ), 1 );
-        hessian = linear::inverse( f.hessian( x ) );
-        direction = getDirection( gradient, hessian );
-    }
+        if ( norm( direction ) < precision )
+        {
+            break;
+        }
 
-    if ( logFrequency > 0 )
-    {
-        lastFunctionValue = f( x );
-        std::cout << i << ") x = " << x << "; f(x) = " << lastFunctionValue << "; step = " << step << "; direction = " << direction << '\n';
-    }
-
-    if ( converganceCounter == 100 )
-    {
-        std::cout << "Newton-Raphson method does not converge.\n";
+        x -= direction;
     }
 
     return x;

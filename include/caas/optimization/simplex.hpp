@@ -48,7 +48,7 @@ T simplex
 
     std::vector< double > fCache( N + 1 );
 
-    T xc;
+    auto xc{ x0 };
     double simplexDistance{ 0 };
     std::int32_t skipIndex{ -1 };
 

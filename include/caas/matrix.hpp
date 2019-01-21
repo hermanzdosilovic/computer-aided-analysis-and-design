@@ -83,12 +83,13 @@ public:
     static Matrix WithData( T const & data, std::size_t const rows, std::size_t const cols )
     {
         assert( std::size( data ) == rows * cols );
+
         Matrix matrix{ rows, cols };
 
         std::size_t i{ 0 };
-        for ( auto const & x : data )
+        for ( auto const x : data )
         {
-            matrix.data_.get()[ i ] = x;
+            matrix.data_.get()[ i++ ] = x;
         }
 
         return matrix;
@@ -461,6 +462,16 @@ caas::Matrix operator+( T const constant, caas::Matrix const & matrix )
 auto norm( caas::Matrix const & matrix )
 {
     assert( ( matrix.rows() == 1 && matrix.cols() > 0 ) || ( matrix.cols() == 1 && matrix.rows() > 0 ) );
-    auto result{ matrix * matrix.transpose() };
-    return result( 0, 0 );
+
+    caas::Matrix result;
+    if ( matrix.rows() == 1 )
+    {
+        result = matrix * matrix.transpose();
+    }
+    else
+    {
+        result = matrix.transpose() * matrix;
+    }
+
+    return std::sqrt( result( 0, 0 ) );
 }
