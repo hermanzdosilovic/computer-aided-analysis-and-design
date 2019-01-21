@@ -49,14 +49,14 @@ auto box
     std::mt19937 randomGenerator{ std::random_device{}() };
     std::uniform_real_distribution uniformDistribution( 0.0, 1.0 );
 
-    std::vector< T > x( 2 * N, x0 );
+    std::vector< T > x( 2 * N );
     auto xc{ x0 };
 
-    for ( auto & xi : x )
+    for ( std::size_t i{ 0 }; i < std::size( x ); ++i )
     {
-        for ( auto i{ decltype( N ){ 0 } }; i < N; ++i )
+        for ( auto j{ decltype( N ){ 0 } }; j < N; ++j )
         {
-            xi[ i ] = lowerBound[ i ] + uniformDistribution( randomGenerator ) * ( upperBound[ i ] - lowerBound[ i ] );
+            x[ i ][ j ] = lowerBound[ j ] + uniformDistribution( randomGenerator ) * ( upperBound[ j ] - lowerBound[ j ] );
         }
 
         bool respectsImplicitConstrains{ false };
@@ -65,7 +65,7 @@ auto box
             respectsImplicitConstrains = true;
             for ( auto const & constrain : implicitConstrains )
             {
-                if ( constrain( xi ) < 0 )
+                if ( constrain( x[ i ] ) < 0 )
                 {
                     respectsImplicitConstrains = false;
                     break;
@@ -74,16 +74,16 @@ auto box
 
             if ( !respectsImplicitConstrains )
             {
-                xi = 0.5 * ( xi + xc );
+                x[ i ]= 0.5 * ( x[ i ] + xc );
             }
         }
 
-        //xc *= 0;
-        //for ( auto const & t : x )
-        //{
-        //    xc += t;
-        //}
-        //xc /= std::size( x );
+        xc *= 0;
+        for ( auto const & e : x )
+        {
+            xc += e;
+        }
+        xc /= ( i + 1 );
     }
 
     double distance{ 0 };
@@ -95,7 +95,7 @@ auto box
 
         std::sort( std::begin( x ), std::end( x ), [ & f ]( auto const & a, auto const & b ){ return f( a ) < f( b ); } );
         auto h { std::size( x ) - 1 };
-        auto h2{ 0 };
+        auto h2{ std::size( x ) - 2 };
 
         xc *= 0;
         for ( auto i{ decltype( h ){ 0 } }; i < h; ++i )
@@ -105,7 +105,6 @@ auto box
         xc /= h;
 
         auto xr{ ( 1 + alpha ) * xc - alpha * x[ h ] };
-
         for ( auto i{ decltype( N ){ 0 } }; i < N; ++i )
         {
             xr[ i ] = std::clamp( xr[ i ], lowerBound[ i ], upperBound[ i ] );
