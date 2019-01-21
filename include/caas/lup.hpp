@@ -32,7 +32,7 @@ void decompose( Matrix & matrix, Matrix & vector, Strategy const strategy = Stra
         {
             if ( strategy == Strategy::LU )
             {
-                LOG_ERROR( "Pivot element at position (%d, %d) is %f.", i, i, matrix(i, i) );
+                LOG_ERROR( "Pivot element at position (%ld, %ld) is %f.", i, i, matrix(i, i) );
                 LOG_ERROR( "Use LUP decomposition instead of LU decomposition." );
                 break;
             }
@@ -50,7 +50,7 @@ void decompose( Matrix & matrix, Matrix & vector, Strategy const strategy = Stra
 
             if ( maxAbsPivot < precision )
             {
-                LOG_ERROR( "Found maximum absolute pivot at position (%d, %d) with value %f.", index, i, matrix( index, i ) );
+                LOG_ERROR( "Found maximum absolute pivot at position (%ld, %ld) with value %f.", index, i, matrix( index, i ) );
                 break;
             }
 
@@ -67,9 +67,9 @@ void decompose( Matrix & matrix, Matrix & vector, Strategy const strategy = Stra
             }
         }
 
-    #ifndef NDEBUG
-        std::cout << matrix << '\n';
-    #endif
+    //#ifndef NDEBUG
+    //    std::cout << matrix << '\n';
+    //#endif
 
     }
 }

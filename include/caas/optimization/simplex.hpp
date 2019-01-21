@@ -34,9 +34,9 @@ T simplex
     std::vector< T > x( N + 1 );
     x[ 0 ] = x0;
 
-    for ( auto i{ 1 }; i <= N; ++i )
+    for ( std::size_t i{ 1 }; i <= N; ++i )
     {
-        for ( auto j{ 0 }; j < N; ++j )
+        for ( std::size_t j{ 0 }; j < N; ++j )
         {
             x[ i ][ j ] = a2;
         }
@@ -61,9 +61,9 @@ T simplex
             ++functionCalls;
         }
 
-        for ( auto i{ 1 }; i <= N; ++i )
+        for ( std::size_t i{ 1 }; i <= N; ++i )
         {
-            if ( i == skipIndex )
+            if ( static_cast< decltype( skipIndex ) >( i ) == skipIndex )
             {
                 continue;
             }
@@ -80,7 +80,7 @@ T simplex
         }
 
         xc *= 0;
-        for ( auto i{ 0 }; i <= N; ++i )
+        for ( std::size_t i{ 0 }; i <= N; ++i )
         {
             if ( i != iMax )
             {
@@ -116,7 +116,7 @@ T simplex
         else
         {
             bool isSecondBiggest{ true };
-            for ( auto i{ 0 }; i <= N; ++i )
+            for ( std::size_t i{ 0 }; i <= N; ++i )
             {
                 if ( i != iMax && !( fR > fCache[ i ] ) )
                 {
@@ -147,10 +147,10 @@ T simplex
                 else
                 {
                     skipIndex = -1;
-                    for ( auto i{ 0 }; i <= N; ++i )
+                    for ( std::size_t i{ 0 }; i <= N; ++i )
                     {
                         x[ i ] += x[ iMin ];
-                        x[ i ] *= 0.5;
+                        x[ i ] *= sigma;
                     }
                 }
             }
@@ -163,7 +163,7 @@ T simplex
         }
 
         simplexDistance = 0;
-        for ( auto i{ 0 }; i <= N; ++i )
+        for ( std::size_t i{ 0 }; i <= N; ++i )
         {
             simplexDistance += ( x[ i ] - xc ) * ( x[ i ] - xc );
         }

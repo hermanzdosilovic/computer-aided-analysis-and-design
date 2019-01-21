@@ -32,7 +32,7 @@ T hooke_jeeves( Function f, T const & x0, T const & dx, T const & precision )
     {
         T xn{ xp };
         fN = fP;
-        for ( auto i{ 0 }; i < N; ++i )
+        for ( std::size_t i{ 0 }; i < N; ++i )
         {
             xn[ i ] += d[ i ];
             double n{ f( xn ) };

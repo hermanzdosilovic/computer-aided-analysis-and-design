@@ -14,12 +14,12 @@ namespace caas::optimization
 template< typename Function, typename T >
 T axis( Function f, T const & x0, T const & precision )
 {
-    #define ITERATION_LOG() LOG_INFO( "Iteration %u: f(%s) = %f\n", iteration, std::to_string( x ).c_str(), f( x ) )
+    //#define ITERATION_LOG() LOG_INFO( "Iteration %u: f(%s) = %f\n", iteration, std::to_string( x ).c_str(), f( x ) )
 
     auto const N{ std::size( x0 ) };
 
     std::vector< T > e( N );
-    for ( auto i{ 0 }; i < N; ++i )
+    for ( std::size_t i{ 0 }; i < N; ++i )
     {
         e[ i ][ i ] = 1;
     }
@@ -32,9 +32,9 @@ T axis( Function f, T const & x0, T const & precision )
 
     do
     {
-        ITERATION_LOG();
+        //ITERATION_LOG();
         y = x;
-        for ( auto i{ 0 }; i < N; ++i )
+        for ( std::size_t i{ 0 }; i < N; ++i )
         {
             auto lambda = golden
             (
@@ -47,15 +47,15 @@ T axis( Function f, T const & x0, T const & precision )
                 precision[ i ]
             );
             x += lambda * e[ i ];
-            LOG_INFO( "Iteration %u: lambda[%d] = %f\n", iteration, i, lambda );
+            //LOG_INFO( "Iteration %u: lambda[%d] = %f\n", iteration, i, lambda );
         }
         ++iteration;
     } while ( !( std::abs( x - y ) <= precision ) );
 
-    ITERATION_LOG();
-    LOG_INFO( "Total number of function calls: %u\n", functionCalls );
+    //ITERATION_LOG();
+    //LOG_INFO( "Total number of function calls: %u\n", functionCalls );
 
-    #undef ITERATION_LOG
+    //#undef ITERATION_LOG
 
     return x;
 }

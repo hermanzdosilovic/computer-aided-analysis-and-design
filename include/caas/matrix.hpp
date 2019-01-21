@@ -79,6 +79,21 @@ public:
         return Random( size, size );
     }
 
+    template< typename T >
+    static Matrix WithData( T const & data, std::size_t const rows, std::size_t const cols )
+    {
+        assert( std::size( data ) == rows * cols );
+        Matrix matrix{ rows, cols };
+
+        std::size_t i{ 0 };
+        for ( auto const & x : data )
+        {
+            matrix.data_.get()[ i ] = x;
+        }
+
+        return matrix;
+    }
+
     std::size_t rows() const { return rows_; }
     std::size_t cols() const { return cols_; }
     std::size_t size() const { return size_; }
@@ -271,15 +286,25 @@ public:
 
     friend std::ostream & operator<<( std::ostream & stream, Matrix const & matrix )
     {
+        stream << '{';
+
+        char outerSeparator[]{ '\0', ' ', '\0' };
         for ( std::size_t i{ 0 }; i < matrix.rows_; ++i )
         {
+            stream << outerSeparator << '{';
+
+            char innerSeparator[]{ '\0', ' ', '\0' };
             for ( std::size_t j{ 0 }; j < matrix.cols_; ++j )
             {
-                stream << matrix( i, j );
-                if ( j + 1 < matrix.cols_ ) { stream << ' '; }
+                stream << innerSeparator << matrix( i, j );
+                innerSeparator[ 0 ] = ',';
             }
-            stream << '\n';
+
+            stream << '}';
+            outerSeparator[ 0 ] = ',';
         }
+
+        stream << '}';
 
         return stream;
     }
@@ -431,4 +456,11 @@ template< typename T >
 caas::Matrix operator+( T const constant, caas::Matrix const & matrix )
 {
     return matrix + constant;
+}
+
+auto norm( caas::Matrix const & matrix )
+{
+    assert( ( matrix.rows() == 1 && matrix.cols() > 0 ) || ( matrix.cols() == 1 && matrix.rows() > 0 ) );
+    auto result{ matrix * matrix.transpose() };
+    return result( 0, 0 );
 }

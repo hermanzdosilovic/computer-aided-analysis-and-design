@@ -5,8 +5,6 @@
 
 int main()
 {
-    constexpr auto decimalPrecision{ 4 };
-
     constexpr std::size_t numberOfComponents{ 6 };
     constexpr std::size_t populationSizes[]{ 3, 50, 100, 200 };
 

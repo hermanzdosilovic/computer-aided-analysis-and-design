@@ -32,7 +32,7 @@ void backward( Matrix const & matrix, Matrix & vector )
     assert( matrix.rows() == matrix.cols() );
     assert( vector.rows() == matrix.rows() && vector.cols() == 1 );
 
-    for ( std::size_t i{ vector.rows() - 1 }; i >= 0; --i )
+    for ( std::size_t i{ vector.rows() - 1 }; ; --i )
     {
         vector( i, 0 ) = vector( i, 0 );
         for ( std::size_t j{ i + 1 }; j < vector.rows(); ++j )
