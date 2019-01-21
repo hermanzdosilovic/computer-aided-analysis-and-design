@@ -12,11 +12,12 @@ int main()
 {
     caas::Matrix a { "test_data/hw05/matrix1_t04.txt" };
     caas::Matrix x0{ "test_data/hw05/matrix2_t04.txt" };
+    caas::Matrix b { "test_data/hw05/matrix3_t04.txt" };
 
     auto step{ 0.01 };
     auto tMax{ 10 };
 
-    auto states{ caas::numerical::runge_kutta( a, x0, step, tMax ) };
+    auto states{ caas::numerical::runge_kutta( a, x0, b, step, tMax ) };
 
     std::vector< double > x( std::size( states ) );
     std::vector< double > elongation( std::size( states ) );

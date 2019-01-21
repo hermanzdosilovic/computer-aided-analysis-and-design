@@ -9,7 +9,7 @@
 namespace caas::numerical
 {
 
-auto runge_kutta( Matrix const & a, Matrix const & x0, double const step, double const tMax )
+auto runge_kutta( Matrix const & a, Matrix const & x0, Matrix const & b, double const step, double const tMax )
 {
     assert( a.rows() == a .cols() );
     assert( a.cols() == x0.rows() );
@@ -26,10 +26,10 @@ auto runge_kutta( Matrix const & a, Matrix const & x0, double const step, double
     {
         states.emplace_back( x );
 
-        auto const m1{ a * x };
-        auto const m2{ a * ( x + m1 * step * 0.5 ) };
-        auto const m3{ a * ( x + m2 * step * 0.5 ) };
-        auto const m4{ a * ( x + m3 * step       ) };
+        auto const m1{ a * x + b };
+        auto const m2{ a * ( x + m1 * step * 0.5 ) + b };
+        auto const m3{ a * ( x + m2 * step * 0.5 ) + b };
+        auto const m4{ a * ( x + m3 * step       ) + b };
 
         x += ( m1 + 2 * m2 + 2 * m3 + m4 ) * step / 6;
     }

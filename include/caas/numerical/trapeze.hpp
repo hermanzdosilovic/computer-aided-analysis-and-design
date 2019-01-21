@@ -9,7 +9,7 @@
 namespace caas::numerical
 {
 
-auto trapeze( Matrix const & a, Matrix const & x0, double const step, double const tMax )
+auto trapeze( Matrix const & a, Matrix const & x0, Matrix const & b, double const step, double const tMax )
 {
     assert( a.rows() == a .cols() );
     assert( a.cols() == x0.rows() );
@@ -19,6 +19,7 @@ auto trapeze( Matrix const & a, Matrix const & x0, double const step, double con
 
     auto const u{ Matrix{ a }.setIdentity() };
     auto const r{ linear::inverse( u - a * step * 0.5 ) * ( u + a * step * 0.5 ) };
+    auto const s{ linear::inverse( u - a * step * 0.5 ) * b * step * 0.5 };
 
     auto x{ x0 };
 
@@ -28,7 +29,7 @@ auto trapeze( Matrix const & a, Matrix const & x0, double const step, double con
     for ( double t{ 0 }; t <= tMax; t += step )
     {
         states.emplace_back( x );
-        x = r * x;
+        x = r * x + s;
     }
 
     return states;
