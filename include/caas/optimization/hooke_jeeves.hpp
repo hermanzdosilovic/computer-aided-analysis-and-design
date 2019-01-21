@@ -7,35 +7,36 @@ namespace caas::optimization
 {
 
 template< typename Function, typename T >
-T hooke_jeeves( Function f, T const & x0, T const & dx, T const & precision )
+T hooke_jeeves( Function && f, T const & x0, T const & dx, T const & precision )
 {
-    #define ITERATION_LOG() \
-    LOG_INFO \
-    ( \
-        "Iteration %u: f(xb=%s) = %f, f(xp=%s) = %f, f(xn=%s) = %f\n", \
-        iteration, std::to_string( xb ).c_str(), f( xb ), std::to_string( xp ).c_str(), f( xp ), std::to_string( xn ).c_str(), f( xn ) \
-    )
+    /*#define ITERATION_LOG() \
+    //LOG_INFO \
+    //( \
+    //    "Iteration %u: f(xb=%s) = %f, f(xp=%s) = %f, f(xn=%s) = %f\n", \
+    //    iteration, std::to_string( xb ).c_str(), f( xb ), std::to_string( xp ).c_str(), f( xp ), std::to_string( xn ).c_str(), f( xn ) \
+    //)
+    */
 
     auto const N{ std::size( x0 ) };
 
-    T xp{ x0 };
-    T xb{ x0 };
-    T d{ dx };
+    auto xp{ x0 };
+    auto xb{ x0 };
+    auto d{ dx };
 
-    double fP{ f( xp ) };
-    double fB{ fP }, fN{ fP };
+    auto fP{ f( xp ) };
+    auto fB{ fP }, fN{ fP };
 
     std::uint16_t iteration{ 0 };
     std::uint16_t functionCalls{ 1 };
 
     do
     {
-        T xn{ xp };
+        auto xn{ xp };
         fN = fP;
         for ( std::size_t i{ 0 }; i < N; ++i )
         {
             xn[ i ] += d[ i ];
-            double n{ f( xn ) };
+            auto n{ f( xn ) };
             ++functionCalls;
 
             if ( n > fN )
@@ -58,7 +59,7 @@ T hooke_jeeves( Function f, T const & x0, T const & dx, T const & precision )
             }
         }
 
-        ITERATION_LOG();
+        //ITERATION_LOG();
 
         if ( fN < fB )
         {
@@ -78,9 +79,9 @@ T hooke_jeeves( Function f, T const & x0, T const & dx, T const & precision )
         ++iteration;
     } while ( !( d <= precision ) );
 
-    LOG_INFO( "Total number of function calls: %u\n", functionCalls );
+    //LOG_INFO( "Total number of function calls: %u\n", functionCalls );
 
-    #undef ITERATION_LOG
+    //#undef ITERATION_LOG
 
     return xb;
 }

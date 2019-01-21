@@ -111,6 +111,24 @@ caas::Point< N > operator/( T const t, caas::Point< N > const & p )
     return other;
 }
 
+template< std::size_t N, typename T >
+caas::Point< N > & operator+=( caas::Point< N > & p, T const t )
+{
+    for ( auto & i : p )
+    {
+        i += t;
+    }
+    return p;
+}
+
+template< std::size_t N, typename T >
+caas::Point< N > operator+( T const t, caas::Point< N > const & p )
+{
+    auto other{ p };
+    other += t;
+    return other;
+}
+
 namespace std
 {
 
